@@ -1,0 +1,2765 @@
+Terminals which are not used
+
+   BREAK
+   CHARACTER
+   CASE
+   CONTINUE
+   DO
+   EXIT
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END ID
+
+    2 zero_one_vc_dec: DECLARE one_more_vc
+    3                | /* empty */
+
+    4 one_more_vc: var_const_dec one_more_vc
+    5            | var_const_dec
+
+    6 var_const_dec: const_dec
+    7              | var_dec
+    8              | arr_dec
+
+    9 const_dec: ID ':' CONSTANT ASSIGN const_val ';'
+   10          | ID ':' CONSTANT ':' var_type ASSIGN const_val ';'
+
+   11 var_dec: ID ';'
+   12        | ID ':' var_type ';'
+   13        | ID ASSIGN expr ';'
+   14        | ID ':' var_type ASSIGN const_val ';'
+
+   15 arr_dec: ID ':' var_type '[' expr ']' ';'
+
+   16 var_type: INTEGER
+   17         | STRING
+   18         | BOOLEAN
+   19         | FLOAT
+
+   20 zero_more_fp_dec: one_more_fp_dec
+   21                 | /* empty */
+
+   22 one_more_fp_dec: fp_dec one_more_fp_dec
+   23                | fp_dec
+
+   24 @1: /* empty */
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type block_stat END ID ';'
+
+   26 zero_more_formal_arg: '(' one_more_formal_arg ')'
+   27                     | /* empty */
+
+   28 one_more_formal_arg: arg ';' one_more_formal_arg
+   29                    | arg
+
+   30 arg: ID ':' var_type
+
+   31 opt_return_type: RETURN var_type
+   32                | /* empty */
+
+   33 zero_more_stat: one_more_stat
+   34               | /* empty */
+
+   35 one_more_stat: stmt one_more_stat
+   36              | stmt
+
+   37 stmt: bos_stmt
+   38     | conditional_stat
+   39     | loop_stat
+   40     | func_invoc ';'
+
+   41 bos_stmt: block_stat
+   42         | simple_stmt
+
+   43 simple_stmt: ID ASSIGN expr ';'
+   44            | ID '[' expr ']' ASSIGN expr ';'
+   45            | PRINT expr ';'
+   46            | PRINTLN expr ';'
+   47            | READ ID ';'
+   48            | RETURN ';'
+   49            | RETURN expr ';'
+
+   50 block_stat: block_stat_clean ';'
+   51           | block_stat_clean
+
+   52 @2: /* empty */
+
+   53 block_stat_clean: zero_one_vc_dec BEGIN_TOKEN @2 one_more_stat END
+
+   54 conditional_stat: IF expr THEN bos_stmt END IF ';'
+   55                 | IF expr THEN bos_stmt ELSE bos_stmt END IF ';'
+
+   56 loop_stat: WHILE expr LOOP bos_stmt END LOOP ';'
+   57          | FOR '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+   58 @3: /* empty */
+
+   59 func_invoc: ID @3 '(' opt_comma_sep_exprs ')'
+
+   60 opt_comma_sep_exprs: comma_sep_exprs
+   61                    | /* empty */
+
+   62 comma_sep_exprs: func_expr ',' comma_sep_exprs
+   63                | func_expr
+
+   64 func_expr: expr
+
+   65 const_val: INTConst
+   66          | STRConst
+   67          | BOOLConst
+   68          | FLOATConst
+
+   69 expr: ID
+   70     | const_val
+   71     | ID '[' expr ']'
+   72     | func_invoc
+   73     | '-' expr
+   74     | expr '*' expr
+   75     | expr '/' expr
+   76     | expr '+' expr
+   77     | expr '-' expr
+   78     | expr '<' expr
+   79     | expr LE expr
+   80     | expr '=' expr
+   81     | expr GE expr
+   82     | expr '>' expr
+   83     | expr NE expr
+   84     | NOT expr
+   85     | expr AND expr
+   86     | expr OR expr
+   87     | '(' expr ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 26 57 59 87
+')' (41) 26 57 59 87
+'*' (42) 74
+'+' (43) 76
+',' (44) 62
+'-' (45) 73 77
+'/' (47) 75
+':' (58) 9 10 12 14 15 30
+';' (59) 1 9 10 11 12 13 14 15 25 28 40 43 44 45 46 47 48 49 50 54
+    55 56 57
+'<' (60) 78
+'=' (61) 80
+'>' (62) 82
+'[' (91) 15 44 71
+']' (93) 15 44 71
+error (256)
+BEGIN_TOKEN (258) 1 53
+BOOLEAN (259) 18
+BREAK (260)
+CHARACTER (261)
+CASE (262)
+CONTINUE (263)
+CONSTANT (264) 9 10
+DECLARE (265) 2
+DO (266)
+ELSE (267) 55
+END (268) 1 25 53 54 55 56 57
+EXIT (269)
+FLOAT (270) 19
+FOR (271) 57
+IF (272) 54 55
+IN (273) 57
+INTEGER (274) 16
+LOOP (275) 56 57
+PRINT (276) 45
+PRINTLN (277) 46
+PROCEDURE (278) 25
+PROGRAM (279) 1
+RANGE (280) 57
+READ (281) 47
+RETURN (282) 31 48 49
+STRING (283) 17
+THEN (284) 54 55
+WHILE (285) 56
+BOOLConst (286) 67
+FLOATConst (287) 68
+ID (288) 1 9 10 11 12 13 14 15 25 30 43 44 47 57 59 69 71
+INTConst (289) 65
+STRConst (290) 66
+ASSIGN (291) 9 10 13 14 43 44
+OR (292) 86
+AND (293) 85
+NOT (294) 84
+NE (295) 83
+GE (296) 81
+LE (297) 79
+Unary_minus (298)
+
+
+Nonterminals, with rules where they appear
+
+$accept (58)
+    on left: 0
+program (59)
+    on left: 1, on right: 0
+zero_one_vc_dec (60)
+    on left: 2 3, on right: 1 53
+one_more_vc (61)
+    on left: 4 5, on right: 2 4
+var_const_dec (62)
+    on left: 6 7 8, on right: 4 5
+const_dec (63)
+    on left: 9 10, on right: 6
+var_dec (64)
+    on left: 11 12 13 14, on right: 7
+arr_dec (65)
+    on left: 15, on right: 8
+var_type (66)
+    on left: 16 17 18 19, on right: 10 12 14 15 30 31
+zero_more_fp_dec (67)
+    on left: 20 21, on right: 1
+one_more_fp_dec (68)
+    on left: 22 23, on right: 20 22
+fp_dec (69)
+    on left: 25, on right: 22 23
+@1 (70)
+    on left: 24, on right: 25
+zero_more_formal_arg (71)
+    on left: 26 27, on right: 25
+one_more_formal_arg (72)
+    on left: 28 29, on right: 26 28
+arg (73)
+    on left: 30, on right: 28 29
+opt_return_type (74)
+    on left: 31 32, on right: 25
+zero_more_stat (75)
+    on left: 33 34, on right: 1
+one_more_stat (76)
+    on left: 35 36, on right: 33 35 53
+stmt (77)
+    on left: 37 38 39 40, on right: 35 36
+bos_stmt (78)
+    on left: 41 42, on right: 37 54 55 56 57
+simple_stmt (79)
+    on left: 43 44 45 46 47 48 49, on right: 42
+block_stat (80)
+    on left: 50 51, on right: 25 41
+block_stat_clean (81)
+    on left: 53, on right: 50 51
+@2 (82)
+    on left: 52, on right: 53
+conditional_stat (83)
+    on left: 54 55, on right: 38
+loop_stat (84)
+    on left: 56 57, on right: 39
+func_invoc (85)
+    on left: 59, on right: 40 72
+@3 (86)
+    on left: 58, on right: 59
+opt_comma_sep_exprs (87)
+    on left: 60 61, on right: 59
+comma_sep_exprs (88)
+    on left: 62 63, on right: 60 62
+func_expr (89)
+    on left: 64, on right: 62 63
+const_val (90)
+    on left: 65 66 67 68, on right: 9 10 14 57 70
+expr (91)
+    on left: 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86
+    87, on right: 13 15 43 44 45 46 49 54 55 56 64 71 73 74 75 76 77
+    78 79 80 81 82 83 84 85 86 87
+
+
+state 0
+
+    0 $accept: . program $end
+
+    PROGRAM  shift, and go to state 1
+
+    program  go to state 2
+
+
+state 1
+
+    1 program: PROGRAM . ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END ID
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 program: PROGRAM ID . zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END ID
+
+    DECLARE  shift, and go to state 5
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec  go to state 6
+
+
+state 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 5
+
+    2 zero_one_vc_dec: DECLARE . one_more_vc
+
+    ID  shift, and go to state 7
+
+    one_more_vc    go to state 8
+    var_const_dec  go to state 9
+    const_dec      go to state 10
+    var_dec        go to state 11
+    arr_dec        go to state 12
+
+
+state 6
+
+    1 program: PROGRAM ID zero_one_vc_dec . zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END ID
+
+    PROCEDURE  shift, and go to state 13
+
+    $default  reduce using rule 21 (zero_more_fp_dec)
+
+    zero_more_fp_dec  go to state 14
+    one_more_fp_dec   go to state 15
+    fp_dec            go to state 16
+
+
+state 7
+
+    9 const_dec: ID . ':' CONSTANT ASSIGN const_val ';'
+   10          | ID . ':' CONSTANT ':' var_type ASSIGN const_val ';'
+   11 var_dec: ID . ';'
+   12        | ID . ':' var_type ';'
+   13        | ID . ASSIGN expr ';'
+   14        | ID . ':' var_type ASSIGN const_val ';'
+   15 arr_dec: ID . ':' var_type '[' expr ']' ';'
+
+    ASSIGN  shift, and go to state 17
+    ';'     shift, and go to state 18
+    ':'     shift, and go to state 19
+
+
+state 8
+
+    2 zero_one_vc_dec: DECLARE one_more_vc .
+
+    $default  reduce using rule 2 (zero_one_vc_dec)
+
+
+state 9
+
+    4 one_more_vc: var_const_dec . one_more_vc
+    5            | var_const_dec .
+
+    ID  shift, and go to state 7
+
+    $default  reduce using rule 5 (one_more_vc)
+
+    one_more_vc    go to state 20
+    var_const_dec  go to state 9
+    const_dec      go to state 10
+    var_dec        go to state 11
+    arr_dec        go to state 12
+
+
+state 10
+
+    6 var_const_dec: const_dec .
+
+    $default  reduce using rule 6 (var_const_dec)
+
+
+state 11
+
+    7 var_const_dec: var_dec .
+
+    $default  reduce using rule 7 (var_const_dec)
+
+
+state 12
+
+    8 var_const_dec: arr_dec .
+
+    $default  reduce using rule 8 (var_const_dec)
+
+
+state 13
+
+   25 fp_dec: PROCEDURE . ID @1 zero_more_formal_arg opt_return_type block_stat END ID ';'
+
+    ID  shift, and go to state 21
+
+
+state 14
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec . BEGIN_TOKEN zero_more_stat END ';' END ID
+
+    BEGIN_TOKEN  shift, and go to state 22
+
+
+state 15
+
+   20 zero_more_fp_dec: one_more_fp_dec .
+
+    $default  reduce using rule 20 (zero_more_fp_dec)
+
+
+state 16
+
+   22 one_more_fp_dec: fp_dec . one_more_fp_dec
+   23                | fp_dec .
+
+    PROCEDURE  shift, and go to state 13
+
+    $default  reduce using rule 23 (one_more_fp_dec)
+
+    one_more_fp_dec  go to state 23
+    fp_dec           go to state 16
+
+
+state 17
+
+   13 var_dec: ID ASSIGN . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 34
+
+
+state 18
+
+   11 var_dec: ID ';' .
+
+    $default  reduce using rule 11 (var_dec)
+
+
+state 19
+
+    9 const_dec: ID ':' . CONSTANT ASSIGN const_val ';'
+   10          | ID ':' . CONSTANT ':' var_type ASSIGN const_val ';'
+   12 var_dec: ID ':' . var_type ';'
+   14        | ID ':' . var_type ASSIGN const_val ';'
+   15 arr_dec: ID ':' . var_type '[' expr ']' ';'
+
+    BOOLEAN   shift, and go to state 35
+    CONSTANT  shift, and go to state 36
+    FLOAT     shift, and go to state 37
+    INTEGER   shift, and go to state 38
+    STRING    shift, and go to state 39
+
+    var_type  go to state 40
+
+
+state 20
+
+    4 one_more_vc: var_const_dec one_more_vc .
+
+    $default  reduce using rule 4 (one_more_vc)
+
+
+state 21
+
+   25 fp_dec: PROCEDURE ID . @1 zero_more_formal_arg opt_return_type block_stat END ID ';'
+
+    $default  reduce using rule 24 (@1)
+
+    @1  go to state 41
+
+
+state 22
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN . zero_more_stat END ';' END ID
+
+    DECLARE  shift, and go to state 5
+    FOR      shift, and go to state 42
+    IF       shift, and go to state 43
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    WHILE    shift, and go to state 48
+    ID       shift, and go to state 49
+
+    END       reduce using rule 34 (zero_more_stat)
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    zero_more_stat    go to state 51
+    one_more_stat     go to state 52
+    stmt              go to state 53
+    bos_stmt          go to state 54
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+    conditional_stat  go to state 58
+    loop_stat         go to state 59
+    func_invoc        go to state 60
+
+
+state 23
+
+   22 one_more_fp_dec: fp_dec one_more_fp_dec .
+
+    $default  reduce using rule 22 (one_more_fp_dec)
+
+
+state 24
+
+   67 const_val: BOOLConst .
+
+    $default  reduce using rule 67 (const_val)
+
+
+state 25
+
+   68 const_val: FLOATConst .
+
+    $default  reduce using rule 68 (const_val)
+
+
+state 26
+
+   59 func_invoc: ID . @3 '(' opt_comma_sep_exprs ')'
+   69 expr: ID .
+   71     | ID . '[' expr ']'
+
+    '['  shift, and go to state 61
+
+    '('       reduce using rule 58 (@3)
+    $default  reduce using rule 69 (expr)
+
+    @3  go to state 62
+
+
+state 27
+
+   65 const_val: INTConst .
+
+    $default  reduce using rule 65 (const_val)
+
+
+state 28
+
+   66 const_val: STRConst .
+
+    $default  reduce using rule 66 (const_val)
+
+
+state 29
+
+   84 expr: NOT . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 63
+
+
+state 30
+
+   73 expr: '-' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 64
+
+
+state 31
+
+   87 expr: '(' . expr ')'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 65
+
+
+state 32
+
+   72 expr: func_invoc .
+
+    $default  reduce using rule 72 (expr)
+
+
+state 33
+
+   70 expr: const_val .
+
+    $default  reduce using rule 70 (expr)
+
+
+state 34
+
+   13 var_dec: ID ASSIGN expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 78
+
+
+state 35
+
+   18 var_type: BOOLEAN .
+
+    $default  reduce using rule 18 (var_type)
+
+
+state 36
+
+    9 const_dec: ID ':' CONSTANT . ASSIGN const_val ';'
+   10          | ID ':' CONSTANT . ':' var_type ASSIGN const_val ';'
+
+    ASSIGN  shift, and go to state 79
+    ':'     shift, and go to state 80
+
+
+state 37
+
+   19 var_type: FLOAT .
+
+    $default  reduce using rule 19 (var_type)
+
+
+state 38
+
+   16 var_type: INTEGER .
+
+    $default  reduce using rule 16 (var_type)
+
+
+state 39
+
+   17 var_type: STRING .
+
+    $default  reduce using rule 17 (var_type)
+
+
+state 40
+
+   12 var_dec: ID ':' var_type . ';'
+   14        | ID ':' var_type . ASSIGN const_val ';'
+   15 arr_dec: ID ':' var_type . '[' expr ']' ';'
+
+    ASSIGN  shift, and go to state 81
+    ';'     shift, and go to state 82
+    '['     shift, and go to state 83
+
+
+state 41
+
+   25 fp_dec: PROCEDURE ID @1 . zero_more_formal_arg opt_return_type block_stat END ID ';'
+
+    '('  shift, and go to state 84
+
+    $default  reduce using rule 27 (zero_more_formal_arg)
+
+    zero_more_formal_arg  go to state 85
+
+
+state 42
+
+   57 loop_stat: FOR . '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+    '('  shift, and go to state 86
+
+
+state 43
+
+   54 conditional_stat: IF . expr THEN bos_stmt END IF ';'
+   55                 | IF . expr THEN bos_stmt ELSE bos_stmt END IF ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 87
+
+
+state 44
+
+   45 simple_stmt: PRINT . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 88
+
+
+state 45
+
+   46 simple_stmt: PRINTLN . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 89
+
+
+state 46
+
+   47 simple_stmt: READ . ID ';'
+
+    ID  shift, and go to state 90
+
+
+state 47
+
+   48 simple_stmt: RETURN . ';'
+   49            | RETURN . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    ';'         shift, and go to state 91
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 92
+
+
+state 48
+
+   56 loop_stat: WHILE . expr LOOP bos_stmt END LOOP ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 93
+
+
+state 49
+
+   43 simple_stmt: ID . ASSIGN expr ';'
+   44            | ID . '[' expr ']' ASSIGN expr ';'
+   59 func_invoc: ID . @3 '(' opt_comma_sep_exprs ')'
+
+    ASSIGN  shift, and go to state 94
+    '['     shift, and go to state 95
+
+    $default  reduce using rule 58 (@3)
+
+    @3  go to state 62
+
+
+state 50
+
+   53 block_stat_clean: zero_one_vc_dec . BEGIN_TOKEN @2 one_more_stat END
+
+    BEGIN_TOKEN  shift, and go to state 96
+
+
+state 51
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat . END ';' END ID
+
+    END  shift, and go to state 97
+
+
+state 52
+
+   33 zero_more_stat: one_more_stat .
+
+    $default  reduce using rule 33 (zero_more_stat)
+
+
+state 53
+
+   35 one_more_stat: stmt . one_more_stat
+   36              | stmt .
+
+    DECLARE  shift, and go to state 5
+    FOR      shift, and go to state 42
+    IF       shift, and go to state 43
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    WHILE    shift, and go to state 48
+    ID       shift, and go to state 49
+
+    END       reduce using rule 36 (one_more_stat)
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    one_more_stat     go to state 98
+    stmt              go to state 53
+    bos_stmt          go to state 54
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+    conditional_stat  go to state 58
+    loop_stat         go to state 59
+    func_invoc        go to state 60
+
+
+state 54
+
+   37 stmt: bos_stmt .
+
+    $default  reduce using rule 37 (stmt)
+
+
+state 55
+
+   42 bos_stmt: simple_stmt .
+
+    $default  reduce using rule 42 (bos_stmt)
+
+
+state 56
+
+   41 bos_stmt: block_stat .
+
+    $default  reduce using rule 41 (bos_stmt)
+
+
+state 57
+
+   50 block_stat: block_stat_clean . ';'
+   51           | block_stat_clean .
+
+    ';'  shift, and go to state 99
+
+    $default  reduce using rule 51 (block_stat)
+
+
+state 58
+
+   38 stmt: conditional_stat .
+
+    $default  reduce using rule 38 (stmt)
+
+
+state 59
+
+   39 stmt: loop_stat .
+
+    $default  reduce using rule 39 (stmt)
+
+
+state 60
+
+   40 stmt: func_invoc . ';'
+
+    ';'  shift, and go to state 100
+
+
+state 61
+
+   71 expr: ID '[' . expr ']'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 101
+
+
+state 62
+
+   59 func_invoc: ID @3 . '(' opt_comma_sep_exprs ')'
+
+    '('  shift, and go to state 102
+
+
+state 63
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   84     | NOT expr .
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 84 (expr)
+
+
+state 64
+
+   73 expr: '-' expr .
+   74     | expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    $default  reduce using rule 73 (expr)
+
+
+state 65
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+   87     | '(' expr . ')'
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ')'  shift, and go to state 103
+
+
+state 66
+
+   86 expr: expr OR . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 104
+
+
+state 67
+
+   85 expr: expr AND . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 105
+
+
+state 68
+
+   78 expr: expr '<' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 106
+
+
+state 69
+
+   80 expr: expr '=' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 107
+
+
+state 70
+
+   82 expr: expr '>' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 108
+
+
+state 71
+
+   83 expr: expr NE . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 109
+
+
+state 72
+
+   81 expr: expr GE . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 110
+
+
+state 73
+
+   79 expr: expr LE . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 111
+
+
+state 74
+
+   76 expr: expr '+' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 112
+
+
+state 75
+
+   77 expr: expr '-' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 113
+
+
+state 76
+
+   74 expr: expr '*' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 114
+
+
+state 77
+
+   75 expr: expr '/' . expr
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 115
+
+
+state 78
+
+   13 var_dec: ID ASSIGN expr ';' .
+
+    $default  reduce using rule 13 (var_dec)
+
+
+state 79
+
+    9 const_dec: ID ':' CONSTANT ASSIGN . const_val ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+
+    const_val  go to state 116
+
+
+state 80
+
+   10 const_dec: ID ':' CONSTANT ':' . var_type ASSIGN const_val ';'
+
+    BOOLEAN  shift, and go to state 35
+    FLOAT    shift, and go to state 37
+    INTEGER  shift, and go to state 38
+    STRING   shift, and go to state 39
+
+    var_type  go to state 117
+
+
+state 81
+
+   14 var_dec: ID ':' var_type ASSIGN . const_val ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+
+    const_val  go to state 118
+
+
+state 82
+
+   12 var_dec: ID ':' var_type ';' .
+
+    $default  reduce using rule 12 (var_dec)
+
+
+state 83
+
+   15 arr_dec: ID ':' var_type '[' . expr ']' ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 119
+
+
+state 84
+
+   26 zero_more_formal_arg: '(' . one_more_formal_arg ')'
+
+    ID  shift, and go to state 120
+
+    one_more_formal_arg  go to state 121
+    arg                  go to state 122
+
+
+state 85
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg . opt_return_type block_stat END ID ';'
+
+    RETURN  shift, and go to state 123
+
+    $default  reduce using rule 32 (opt_return_type)
+
+    opt_return_type  go to state 124
+
+
+state 86
+
+   57 loop_stat: FOR '(' . ID IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+    ID  shift, and go to state 125
+
+
+state 87
+
+   54 conditional_stat: IF expr . THEN bos_stmt END IF ';'
+   55                 | IF expr . THEN bos_stmt ELSE bos_stmt END IF ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    THEN  shift, and go to state 126
+    OR    shift, and go to state 66
+    AND   shift, and go to state 67
+    '<'   shift, and go to state 68
+    '='   shift, and go to state 69
+    '>'   shift, and go to state 70
+    NE    shift, and go to state 71
+    GE    shift, and go to state 72
+    LE    shift, and go to state 73
+    '+'   shift, and go to state 74
+    '-'   shift, and go to state 75
+    '*'   shift, and go to state 76
+    '/'   shift, and go to state 77
+
+
+state 88
+
+   45 simple_stmt: PRINT expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 127
+
+
+state 89
+
+   46 simple_stmt: PRINTLN expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 128
+
+
+state 90
+
+   47 simple_stmt: READ ID . ';'
+
+    ';'  shift, and go to state 129
+
+
+state 91
+
+   48 simple_stmt: RETURN ';' .
+
+    $default  reduce using rule 48 (simple_stmt)
+
+
+state 92
+
+   49 simple_stmt: RETURN expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 130
+
+
+state 93
+
+   56 loop_stat: WHILE expr . LOOP bos_stmt END LOOP ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    LOOP  shift, and go to state 131
+    OR    shift, and go to state 66
+    AND   shift, and go to state 67
+    '<'   shift, and go to state 68
+    '='   shift, and go to state 69
+    '>'   shift, and go to state 70
+    NE    shift, and go to state 71
+    GE    shift, and go to state 72
+    LE    shift, and go to state 73
+    '+'   shift, and go to state 74
+    '-'   shift, and go to state 75
+    '*'   shift, and go to state 76
+    '/'   shift, and go to state 77
+
+
+state 94
+
+   43 simple_stmt: ID ASSIGN . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 132
+
+
+state 95
+
+   44 simple_stmt: ID '[' . expr ']' ASSIGN expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 133
+
+
+state 96
+
+   53 block_stat_clean: zero_one_vc_dec BEGIN_TOKEN . @2 one_more_stat END
+
+    $default  reduce using rule 52 (@2)
+
+    @2  go to state 134
+
+
+state 97
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END . ';' END ID
+
+    ';'  shift, and go to state 135
+
+
+state 98
+
+   35 one_more_stat: stmt one_more_stat .
+
+    $default  reduce using rule 35 (one_more_stat)
+
+
+state 99
+
+   50 block_stat: block_stat_clean ';' .
+
+    $default  reduce using rule 50 (block_stat)
+
+
+state 100
+
+   40 stmt: func_invoc ';' .
+
+    $default  reduce using rule 40 (stmt)
+
+
+state 101
+
+   71 expr: ID '[' expr . ']'
+   74     | expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ']'  shift, and go to state 136
+
+
+state 102
+
+   59 func_invoc: ID @3 '(' . opt_comma_sep_exprs ')'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    $default  reduce using rule 61 (opt_comma_sep_exprs)
+
+    func_invoc           go to state 32
+    opt_comma_sep_exprs  go to state 137
+    comma_sep_exprs      go to state 138
+    func_expr            go to state 139
+    const_val            go to state 33
+    expr                 go to state 140
+
+
+state 103
+
+   87 expr: '(' expr ')' .
+
+    $default  reduce using rule 87 (expr)
+
+
+state 104
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+   86     | expr OR expr .
+
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 86 (expr)
+
+
+state 105
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   85     | expr AND expr .
+   86     | expr . OR expr
+
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 85 (expr)
+
+
+state 106
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   78     | expr '<' expr .
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 78 (expr)
+
+
+state 107
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   80     | expr '=' expr .
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 80 (expr)
+
+
+state 108
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   82     | expr '>' expr .
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 82 (expr)
+
+
+state 109
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   83     | expr NE expr .
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 83 (expr)
+
+
+state 110
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   81     | expr GE expr .
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 81 (expr)
+
+
+state 111
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   79     | expr LE expr .
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 79 (expr)
+
+
+state 112
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   76     | expr '+' expr .
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 76 (expr)
+
+
+state 113
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   77     | expr '-' expr .
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 77 (expr)
+
+
+state 114
+
+   74 expr: expr . '*' expr
+   74     | expr '*' expr .
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    $default  reduce using rule 74 (expr)
+
+
+state 115
+
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   75     | expr '/' expr .
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    $default  reduce using rule 75 (expr)
+
+
+state 116
+
+    9 const_dec: ID ':' CONSTANT ASSIGN const_val . ';'
+
+    ';'  shift, and go to state 141
+
+
+state 117
+
+   10 const_dec: ID ':' CONSTANT ':' var_type . ASSIGN const_val ';'
+
+    ASSIGN  shift, and go to state 142
+
+
+state 118
+
+   14 var_dec: ID ':' var_type ASSIGN const_val . ';'
+
+    ';'  shift, and go to state 143
+
+
+state 119
+
+   15 arr_dec: ID ':' var_type '[' expr . ']' ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ']'  shift, and go to state 144
+
+
+state 120
+
+   30 arg: ID . ':' var_type
+
+    ':'  shift, and go to state 145
+
+
+state 121
+
+   26 zero_more_formal_arg: '(' one_more_formal_arg . ')'
+
+    ')'  shift, and go to state 146
+
+
+state 122
+
+   28 one_more_formal_arg: arg . ';' one_more_formal_arg
+   29                    | arg .
+
+    ';'  shift, and go to state 147
+
+    $default  reduce using rule 29 (one_more_formal_arg)
+
+
+state 123
+
+   31 opt_return_type: RETURN . var_type
+
+    BOOLEAN  shift, and go to state 35
+    FLOAT    shift, and go to state 37
+    INTEGER  shift, and go to state 38
+    STRING   shift, and go to state 39
+
+    var_type  go to state 148
+
+
+state 124
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type . block_stat END ID ';'
+
+    DECLARE  shift, and go to state 5
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    block_stat        go to state 149
+    block_stat_clean  go to state 57
+
+
+state 125
+
+   57 loop_stat: FOR '(' ID . IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+    IN  shift, and go to state 150
+
+
+state 126
+
+   54 conditional_stat: IF expr THEN . bos_stmt END IF ';'
+   55                 | IF expr THEN . bos_stmt ELSE bos_stmt END IF ';'
+
+    DECLARE  shift, and go to state 5
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    ID       shift, and go to state 151
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    bos_stmt          go to state 152
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+
+
+state 127
+
+   45 simple_stmt: PRINT expr ';' .
+
+    $default  reduce using rule 45 (simple_stmt)
+
+
+state 128
+
+   46 simple_stmt: PRINTLN expr ';' .
+
+    $default  reduce using rule 46 (simple_stmt)
+
+
+state 129
+
+   47 simple_stmt: READ ID ';' .
+
+    $default  reduce using rule 47 (simple_stmt)
+
+
+state 130
+
+   49 simple_stmt: RETURN expr ';' .
+
+    $default  reduce using rule 49 (simple_stmt)
+
+
+state 131
+
+   56 loop_stat: WHILE expr LOOP . bos_stmt END LOOP ';'
+
+    DECLARE  shift, and go to state 5
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    ID       shift, and go to state 151
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    bos_stmt          go to state 153
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+
+
+state 132
+
+   43 simple_stmt: ID ASSIGN expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 154
+
+
+state 133
+
+   44 simple_stmt: ID '[' expr . ']' ASSIGN expr ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ']'  shift, and go to state 155
+
+
+state 134
+
+   53 block_stat_clean: zero_one_vc_dec BEGIN_TOKEN @2 . one_more_stat END
+
+    DECLARE  shift, and go to state 5
+    FOR      shift, and go to state 42
+    IF       shift, and go to state 43
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    WHILE    shift, and go to state 48
+    ID       shift, and go to state 49
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    one_more_stat     go to state 156
+    stmt              go to state 53
+    bos_stmt          go to state 54
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+    conditional_stat  go to state 58
+    loop_stat         go to state 59
+    func_invoc        go to state 60
+
+
+state 135
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' . END ID
+
+    END  shift, and go to state 157
+
+
+state 136
+
+   71 expr: ID '[' expr ']' .
+
+    $default  reduce using rule 71 (expr)
+
+
+state 137
+
+   59 func_invoc: ID @3 '(' opt_comma_sep_exprs . ')'
+
+    ')'  shift, and go to state 158
+
+
+state 138
+
+   60 opt_comma_sep_exprs: comma_sep_exprs .
+
+    $default  reduce using rule 60 (opt_comma_sep_exprs)
+
+
+state 139
+
+   62 comma_sep_exprs: func_expr . ',' comma_sep_exprs
+   63                | func_expr .
+
+    ','  shift, and go to state 159
+
+    $default  reduce using rule 63 (comma_sep_exprs)
+
+
+state 140
+
+   64 func_expr: expr .
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+
+    $default  reduce using rule 64 (func_expr)
+
+
+state 141
+
+    9 const_dec: ID ':' CONSTANT ASSIGN const_val ';' .
+
+    $default  reduce using rule 9 (const_dec)
+
+
+state 142
+
+   10 const_dec: ID ':' CONSTANT ':' var_type ASSIGN . const_val ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+
+    const_val  go to state 160
+
+
+state 143
+
+   14 var_dec: ID ':' var_type ASSIGN const_val ';' .
+
+    $default  reduce using rule 14 (var_dec)
+
+
+state 144
+
+   15 arr_dec: ID ':' var_type '[' expr ']' . ';'
+
+    ';'  shift, and go to state 161
+
+
+state 145
+
+   30 arg: ID ':' . var_type
+
+    BOOLEAN  shift, and go to state 35
+    FLOAT    shift, and go to state 37
+    INTEGER  shift, and go to state 38
+    STRING   shift, and go to state 39
+
+    var_type  go to state 162
+
+
+state 146
+
+   26 zero_more_formal_arg: '(' one_more_formal_arg ')' .
+
+    $default  reduce using rule 26 (zero_more_formal_arg)
+
+
+state 147
+
+   28 one_more_formal_arg: arg ';' . one_more_formal_arg
+
+    ID  shift, and go to state 120
+
+    one_more_formal_arg  go to state 163
+    arg                  go to state 122
+
+
+state 148
+
+   31 opt_return_type: RETURN var_type .
+
+    $default  reduce using rule 31 (opt_return_type)
+
+
+state 149
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type block_stat . END ID ';'
+
+    END  shift, and go to state 164
+
+
+state 150
+
+   57 loop_stat: FOR '(' ID IN . const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+
+    const_val  go to state 165
+
+
+state 151
+
+   43 simple_stmt: ID . ASSIGN expr ';'
+   44            | ID . '[' expr ']' ASSIGN expr ';'
+
+    ASSIGN  shift, and go to state 94
+    '['     shift, and go to state 95
+
+
+state 152
+
+   54 conditional_stat: IF expr THEN bos_stmt . END IF ';'
+   55                 | IF expr THEN bos_stmt . ELSE bos_stmt END IF ';'
+
+    ELSE  shift, and go to state 166
+    END   shift, and go to state 167
+
+
+state 153
+
+   56 loop_stat: WHILE expr LOOP bos_stmt . END LOOP ';'
+
+    END  shift, and go to state 168
+
+
+state 154
+
+   43 simple_stmt: ID ASSIGN expr ';' .
+
+    $default  reduce using rule 43 (simple_stmt)
+
+
+state 155
+
+   44 simple_stmt: ID '[' expr ']' . ASSIGN expr ';'
+
+    ASSIGN  shift, and go to state 169
+
+
+state 156
+
+   53 block_stat_clean: zero_one_vc_dec BEGIN_TOKEN @2 one_more_stat . END
+
+    END  shift, and go to state 170
+
+
+state 157
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END . ID
+
+    ID  shift, and go to state 171
+
+
+state 158
+
+   59 func_invoc: ID @3 '(' opt_comma_sep_exprs ')' .
+
+    $default  reduce using rule 59 (func_invoc)
+
+
+state 159
+
+   62 comma_sep_exprs: func_expr ',' . comma_sep_exprs
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc       go to state 32
+    comma_sep_exprs  go to state 172
+    func_expr        go to state 139
+    const_val        go to state 33
+    expr             go to state 140
+
+
+state 160
+
+   10 const_dec: ID ':' CONSTANT ':' var_type ASSIGN const_val . ';'
+
+    ';'  shift, and go to state 173
+
+
+state 161
+
+   15 arr_dec: ID ':' var_type '[' expr ']' ';' .
+
+    $default  reduce using rule 15 (arr_dec)
+
+
+state 162
+
+   30 arg: ID ':' var_type .
+
+    $default  reduce using rule 30 (arg)
+
+
+state 163
+
+   28 one_more_formal_arg: arg ';' one_more_formal_arg .
+
+    $default  reduce using rule 28 (one_more_formal_arg)
+
+
+state 164
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type block_stat END . ID ';'
+
+    ID  shift, and go to state 174
+
+
+state 165
+
+   57 loop_stat: FOR '(' ID IN const_val . RANGE const_val ')' LOOP bos_stmt END LOOP ';'
+
+    RANGE  shift, and go to state 175
+
+
+state 166
+
+   55 conditional_stat: IF expr THEN bos_stmt ELSE . bos_stmt END IF ';'
+
+    DECLARE  shift, and go to state 5
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    ID       shift, and go to state 151
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    bos_stmt          go to state 176
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+
+
+state 167
+
+   54 conditional_stat: IF expr THEN bos_stmt END . IF ';'
+
+    IF  shift, and go to state 177
+
+
+state 168
+
+   56 loop_stat: WHILE expr LOOP bos_stmt END . LOOP ';'
+
+    LOOP  shift, and go to state 178
+
+
+state 169
+
+   44 simple_stmt: ID '[' expr ']' ASSIGN . expr ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    ID          shift, and go to state 26
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+    NOT         shift, and go to state 29
+    '-'         shift, and go to state 30
+    '('         shift, and go to state 31
+
+    func_invoc  go to state 32
+    const_val   go to state 33
+    expr        go to state 179
+
+
+state 170
+
+   53 block_stat_clean: zero_one_vc_dec BEGIN_TOKEN @2 one_more_stat END .
+
+    $default  reduce using rule 53 (block_stat_clean)
+
+
+state 171
+
+    1 program: PROGRAM ID zero_one_vc_dec zero_more_fp_dec BEGIN_TOKEN zero_more_stat END ';' END ID .
+
+    $default  reduce using rule 1 (program)
+
+
+state 172
+
+   62 comma_sep_exprs: func_expr ',' comma_sep_exprs .
+
+    $default  reduce using rule 62 (comma_sep_exprs)
+
+
+state 173
+
+   10 const_dec: ID ':' CONSTANT ':' var_type ASSIGN const_val ';' .
+
+    $default  reduce using rule 10 (const_dec)
+
+
+state 174
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type block_stat END ID . ';'
+
+    ';'  shift, and go to state 180
+
+
+state 175
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE . const_val ')' LOOP bos_stmt END LOOP ';'
+
+    BOOLConst   shift, and go to state 24
+    FLOATConst  shift, and go to state 25
+    INTConst    shift, and go to state 27
+    STRConst    shift, and go to state 28
+
+    const_val  go to state 181
+
+
+state 176
+
+   55 conditional_stat: IF expr THEN bos_stmt ELSE bos_stmt . END IF ';'
+
+    END  shift, and go to state 182
+
+
+state 177
+
+   54 conditional_stat: IF expr THEN bos_stmt END IF . ';'
+
+    ';'  shift, and go to state 183
+
+
+state 178
+
+   56 loop_stat: WHILE expr LOOP bos_stmt END LOOP . ';'
+
+    ';'  shift, and go to state 184
+
+
+state 179
+
+   44 simple_stmt: ID '[' expr ']' ASSIGN expr . ';'
+   74 expr: expr . '*' expr
+   75     | expr . '/' expr
+   76     | expr . '+' expr
+   77     | expr . '-' expr
+   78     | expr . '<' expr
+   79     | expr . LE expr
+   80     | expr . '=' expr
+   81     | expr . GE expr
+   82     | expr . '>' expr
+   83     | expr . NE expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+
+    OR   shift, and go to state 66
+    AND  shift, and go to state 67
+    '<'  shift, and go to state 68
+    '='  shift, and go to state 69
+    '>'  shift, and go to state 70
+    NE   shift, and go to state 71
+    GE   shift, and go to state 72
+    LE   shift, and go to state 73
+    '+'  shift, and go to state 74
+    '-'  shift, and go to state 75
+    '*'  shift, and go to state 76
+    '/'  shift, and go to state 77
+    ';'  shift, and go to state 185
+
+
+state 180
+
+   25 fp_dec: PROCEDURE ID @1 zero_more_formal_arg opt_return_type block_stat END ID ';' .
+
+    $default  reduce using rule 25 (fp_dec)
+
+
+state 181
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val . ')' LOOP bos_stmt END LOOP ';'
+
+    ')'  shift, and go to state 186
+
+
+state 182
+
+   55 conditional_stat: IF expr THEN bos_stmt ELSE bos_stmt END . IF ';'
+
+    IF  shift, and go to state 187
+
+
+state 183
+
+   54 conditional_stat: IF expr THEN bos_stmt END IF ';' .
+
+    $default  reduce using rule 54 (conditional_stat)
+
+
+state 184
+
+   56 loop_stat: WHILE expr LOOP bos_stmt END LOOP ';' .
+
+    $default  reduce using rule 56 (loop_stat)
+
+
+state 185
+
+   44 simple_stmt: ID '[' expr ']' ASSIGN expr ';' .
+
+    $default  reduce using rule 44 (simple_stmt)
+
+
+state 186
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' . LOOP bos_stmt END LOOP ';'
+
+    LOOP  shift, and go to state 188
+
+
+state 187
+
+   55 conditional_stat: IF expr THEN bos_stmt ELSE bos_stmt END IF . ';'
+
+    ';'  shift, and go to state 189
+
+
+state 188
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' LOOP . bos_stmt END LOOP ';'
+
+    DECLARE  shift, and go to state 5
+    PRINT    shift, and go to state 44
+    PRINTLN  shift, and go to state 45
+    READ     shift, and go to state 46
+    RETURN   shift, and go to state 47
+    ID       shift, and go to state 151
+
+    $default  reduce using rule 3 (zero_one_vc_dec)
+
+    zero_one_vc_dec   go to state 50
+    bos_stmt          go to state 190
+    simple_stmt       go to state 55
+    block_stat        go to state 56
+    block_stat_clean  go to state 57
+
+
+state 189
+
+   55 conditional_stat: IF expr THEN bos_stmt ELSE bos_stmt END IF ';' .
+
+    $default  reduce using rule 55 (conditional_stat)
+
+
+state 190
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt . END LOOP ';'
+
+    END  shift, and go to state 191
+
+
+state 191
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt END . LOOP ';'
+
+    LOOP  shift, and go to state 192
+
+
+state 192
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP . ';'
+
+    ';'  shift, and go to state 193
+
+
+state 193
+
+   57 loop_stat: FOR '(' ID IN const_val RANGE const_val ')' LOOP bos_stmt END LOOP ';' .
+
+    $default  reduce using rule 57 (loop_stat)

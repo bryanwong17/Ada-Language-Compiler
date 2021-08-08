@@ -1,0 +1,37 @@
+class funcallfunc
+{
+	field static int a
+		sipush 20
+	field static int b = 20
+	method public static int func(int, int)
+	max_stack 15
+	max_locals 15
+	{
+		iload 0
+		iload 1
+		iadd
+		ireturn
+	}
+	method public static int func2(int, int)
+	max_stack 15
+	max_locals 15
+	{
+		iload 0
+		iload 1
+		invokestatic int funcallfunc.func(int, int)
+		ireturn
+	}
+	method public static void main(java.lang.String[])
+	max_stack 15
+	max_locals 15
+	{
+		sipush 50
+		getstatic int funcallfunc.b
+		invokestatic int funcallfunc.func2(int, int)
+		putstatic int funcallfunc.a
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int funcallfunc.a
+		invokevirtual void java.io.PrintStream.println(int)
+		return
+	}
+}

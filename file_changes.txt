@@ -1,0 +1,13 @@
+File changes for Compiler Project 3:
+
+1. ada_parser.y:
+- Add code generation for generating java assembly code
+- Add class and struct label for dealing with labels
+- Set yyin to input file stream
+- Add output file stream
+
+2. symboltable.cpp and symboltable.hpp
+- Add function getIndex to get index of variable
+
+3. Makefile
+- Add several things to run the program with the help of Java Virtual Machine
